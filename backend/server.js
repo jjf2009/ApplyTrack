@@ -1,24 +1,33 @@
-require("dotenv").config();
-const express = require("express");
-const mongoose = require("mongoose");
+require('dotenv').config();
+const app=("./app");
+const {connectDB,disconnectDB} = require('./config/db');
 
-const app = express();
+const Port = process.env.PORT || 5000;
 
-app.get("/", (req, res) => {
-  res.send("API running");
-});
+const start= async () => {
+    await connectDB();
+    const server = app.listen(Port,()=>{
+        console.log(`Server is running on port ${Port}`);
+    })
 
-const mongoDBURL = process.env.MONGODB_URL;
+    const  shutdown = async (signal) => {
+        console.log(`Received ${signal}, shutting down gracefully...`);
+        server.close(async()=>{
+            console.log('Server closed');
+            disconnectDB();
+            process.exit(0);
+    })
+}
 
-mongoose
-  .connect(mongoDBURL)
-  .then(() => {
-    console.log("MongoDB connected");
+process.on('SIGTERM',()=>shutdown('SIGTERM'));
+process.on('SIGINT',()=>shutdown('SIGINT'));
 
-    app.listen(5000, () => {
-      console.log("Server running on port 5000");
-    });
-  })
-  .catch((err) => {
-    console.error("MongoDB connection error:", err);
+
+  process.on('unhandledRejection', (err) => {
+    console.error('Unhandled Rejection:', err);
+    server.close(() => process.exit(1));
   });
+}
+
+
+start();
