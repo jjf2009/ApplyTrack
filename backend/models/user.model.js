@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const hashPassword = require("./hooks/userHooks");
 
 const UserSchema = new mongoose.Schema(
   {
@@ -46,5 +47,7 @@ UserSchema.set("toJSON", {
     return ret;
   },
 });
+
+hashPassword(UserSchema);
 
 module.exports = mongoose.model("User", UserSchema);
