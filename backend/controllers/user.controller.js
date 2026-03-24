@@ -17,7 +17,7 @@ const checkValidation = (req) => {    /// need better understanding of it
   }
 };
 
-const create = async (req, res, next) => {
+const  register  = async (req, res, next) => {
   try {
     checkValidation(req);
 
@@ -31,5 +31,20 @@ const create = async (req, res, next) => {
     next(err); // important → global error handler
   }
 };
+const login = async (req, res, next) => {
+  try {
+    checkValidation(req);
 
-module.exports = { create };
+    const { email, password } = req.body;
+
+    const result = await userService.loginUser({ email, password });
+
+    res.status(StatusCodes.OK).json({
+      success: true,
+      ...result,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+module.exports = { register,login };

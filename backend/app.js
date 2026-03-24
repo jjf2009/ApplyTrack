@@ -1,7 +1,7 @@
 const express = require('express');
 const notFound = require('./middleware/notFound');
 const errorHandler = require('./middleware/errorHandler');
-const userRoutes = require('./routes/user.routes');
+const userRoutes = require('./routes/auth.routes');
 
 const app = express();
 
@@ -13,7 +13,6 @@ app.use("/api/v1/auth", userRoutes);
 
 
 app.use(notFound);
-
 
 app.use(errorHandler);
 

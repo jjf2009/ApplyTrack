@@ -43,14 +43,6 @@ const start = async () => {
   }
 };
 
-process.on('SIGTERM',()=>shutdown('SIGTERM'));
-process.on('SIGINT',()=>shutdown('SIGINT'));
-
-
-  process.on('unhandledRejection', (err) => {
-    console.error('Unhandled Rejection:', err);
-    server.close(() => process.exit(1));
-  });
 
 
 

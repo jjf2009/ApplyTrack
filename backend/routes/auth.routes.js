@@ -1,10 +1,11 @@
-const express = require('express');
-
+const express = require("express");
 const router = express.Router();
 
-const {register} = require('../controllers/user.controller');
+const { register,login } = require("../controllers/user.controller");
 
-router.use('/register',register);
+// POST /api/v1/auth/register
+router.post("/register", register);
+// POST /api/v1/auth/login
+router.post("/login",login);
 
-
-module.exports = register;
+module.exports = router; // ✅ export the router, not the function
